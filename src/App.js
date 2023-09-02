@@ -38,6 +38,14 @@ function Form() {
     // select useState
     const [qnty, setQnty] = useState(1)
 
+    // state variable for item that are added
+    const [items, setItems] = useState([])
+
+    // function to add to the items Array
+    function handleAddItems(item) {
+        setItems((items) => [...items, item])
+    }
+
     // event handler
     function handleSubmit(event) {
         // Ignore default reload
