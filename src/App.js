@@ -35,17 +35,41 @@ function Form() {
     // text input field
     const [description, setDescription] = useState('')
 
+    // select useState
+    const [qnty, setQnty] = useState(1)
+
     // event handler
     function handleSubmit(event) {
         // Ignore default reload
         event.preventDefault()
+
+        // guard clause
+        if (!description) {
+            return
+        }
+
+        // add value to the description useState
+        const newItem = {
+            description,
+            qnty,
+            packed: false,
+            id: Date.now()
+        }
+
+        // use setter function
+        setDescription('')
+        setQnty('')
+
     }
 
     return (
         <>
             <form className="add-form" onSubmit={handleSubmit}>
                 <h3>Trips plan!!</h3>
-                <select>
+                <select
+                    value={qnty}
+                    onChange={event => setQnty(event.target.value)}
+                >
                     {
                         Array.from(
                             { length: 20 },
@@ -61,7 +85,12 @@ function Form() {
 
                     }
                 </select>
-                <input type='text' placeholder="Item" />
+                <input
+                    type='text'
+                    placeholder="Item"
+                    value={description}
+                    onChange={(e) => setDescription(Number(e.target.value))}
+                />
                 <button>Add</button>
             </form>
         </>
@@ -97,11 +126,11 @@ function Item(props) {
                         props.item.quantity
                     }
                     {
-                        props.item.description
+                        " " + props.item.description
                     }
                 </span>
                 <button>
-                    ❌
+                    ❌ + " "
                 </button>
             </li>
         </>
