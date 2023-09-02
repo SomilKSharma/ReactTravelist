@@ -1,24 +1,24 @@
 import { useState } from "react"
 
 export default function App() {
+    // state variable for item that are added
+    const [items, setItems] = useState([])
+    // function to add to the items Array
+    function handleAddItems(item) {
+        setItems((items) => [...items, item])
+    }
     return (
         <>
             <div className="app">
                 < Logo />
-                <Form />
-                <PackinglistList />
+                <Form handleAddItems={handleAddItems} />
+                <PackinglistList items={items} />
                 <Stats />
             </div>
         </>
     )
 }
 
-// Array for values
-const initialItems = [
-    { id: 1, description: "Passports", quantity: 2, packed: false },
-    { id: 2, description: "Socks", quantity: 12, packed: true },
-    { id: 3, description: "Books", quantity: 1, packed: false }
-]
 
 // function for logo
 function Logo() {
@@ -30,7 +30,7 @@ function Logo() {
 }
 
 // function for form
-function Form() {
+function Form({ handleAddItems }) {
 
     // text input field
     const [description, setDescription] = useState('')
@@ -38,13 +38,7 @@ function Form() {
     // select useState
     const [qnty, setQnty] = useState(1)
 
-    // state variable for item that are added
-    const [items, setItems] = useState([])
 
-    // function to add to the items Array
-    function handleAddItems(item) {
-        setItems((items) => [...items, item])
-    }
 
     // event handler
     function handleSubmit(event) {
@@ -63,10 +57,11 @@ function Form() {
             packed: false,
             id: Date.now()
         }
+        handleAddItems(newItem)
 
         // use setter function
         setDescription('')
-        setQnty('')
+        setQnty(1)
 
     }
 
@@ -97,7 +92,7 @@ function Form() {
                     type='text'
                     placeholder="Item"
                     value={description}
-                    onChange={(e) => setDescription(Number(e.target.value))}
+                    onChange={(e) => setDescription(e.target.value)}
                 />
                 <button>Add</button>
             </form>
@@ -106,35 +101,33 @@ function Form() {
 }
 
 // function for packinglist
-function PackinglistList() {
+function PackinglistList({ items }) {
     return (
         <>
             <ul className="list">
-                <li>
-                    {
-                        initialItems.map(
-                            (item) =>
-                                <Item item={item} key={item.id} />
-                        )
-                    }
-                </li>
+                {
+                    items.map(
+                        (item) =>
+                            <Item item={item} key={item.id} />
+                    )
+                }
             </ul>
         </>
     )
 }
 
 // A function for diplaying items
-function Item(props) {
+function Item({ item }) {
     // return the values
     return (
         <>
             <li>
-                <span style={props.item.packed ? { textDecoration: 'line-through' } : {}}>
+                <span style={item.packed ? { textDecoration: 'line-through' } : {}}>
                     {
-                        props.item.quantity
+                        item.quantity
                     }
                     {
-                        " " + props.item.description
+                        " " + item.description
                     }
                 </span>
                 <button>
